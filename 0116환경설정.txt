@@ -1,0 +1,203 @@
+IP : 10.1.41.240 // 짝꿍 : 10.1.44.10 // 종현 : 10.1.43.160 // 민지 : 10.1.41.230
+고정IP : 127.0.0.1 or localhost:1521
+
+sqlplus SCOTT/TIGER
+set linesize 400
+set pagesize 1500
+
+<Java>
+1. jdk 다운로드
+	http://java.sun.com -> Java SE -> Java SE 8u151/ 8u152 -> JDK -> 32/64bit 맞게 다운로드
+	
+2. java DB 다운로드
+	http://java.sun.com -> 회원가입 -> Database 11g Express Edition -> OracleXE112
+
+
+<환경변수>
+1. user에 대한 사용자 변수 => path 지우기
+
+2. 시스템변수
+
+	CLASSPATH => 변수값 : .;
+	(bytecode 경로설정)
+
+	JAVA_HOME => 변수값 : C:\Program Files\Java\jdk1.8.0_151
+		
+	Path => 변수값 : C:\Program Files\Java\jdk1.8.0_151\bin;
+
+
+<에디트플러스>
+
+1. 기본설정
+	1) 파일 - 백업옵션
+	2) 설정&구문강조 - 자동 줄 바꿈
+
+
+2. 사용자 도구 구성
+	사용자 도구 - javac : 명령(javac.exe) / 인수(FileName) / 디렉토리(FileDir)
+	사용자 도구 - java  : 명령(java.exe) / 인수(FileNameNoExt) / 디렉토리(FileDir)
+
+
+3. 단축키
+crtl + s : 저장
+crtl + 1 : javac.exe
+crtl + 2 : java.exe
+shitf + tab : 들여쓰기 정렬
+
+
+<eclipse>
+1. http://eclipse.org
+	-압축파일 -> 해제 -> 문제생기면 단순 폴더삭제로 해결가능 (exe설치파일로 설치하지 말아야 할 이유)
+
+
+
+3. 단축키
+
+crtl + s : 저장
+crtl + d : 줄 삭제
+crtl + 왼쪽클릭 : 소스 간 이동
+
+crtl + shift + / (\) : 주석설정 (주석해제)
+crtl + shift + f : 자동 줄맞춤
+crtl + shift + o : 자동 import
+
+art + 방향키 : 라인 옮기기
+art + shift + r : 모든 글자 한꺼번에 바꾸기
+
+f2 : rename
+
+
+<명명규칙>
+
+1. 변수명, 메소드명 : 소문자로 시작, 두번째 음절부터 대문자
+2. 클래스명 : 첫단어 대문자+ 두번째단어 소문자
+3. 패키지명 : 소문자
+
+
+
+
+<SQLplus>
+
+1.환경설정
+-설치 PW : manager
+-환경변수 -> Path : java경로를 맨 앞으로 이동
+-cmd -> sqlplus -> SYSTEM/manager -> @ scott 경로 붙여넣기
+
+2. 교육용 DB 접속
+sqlplus SCOTT/TIGER
+
+set linesize 200
+set pagesize 1500
+
+3. 빠른 편집
+프롬프트 속성 -> 빠른편집모드(O)
+
+
+<JDBC>
+
+1. 환경설정
+-ojdbc6 복사 (C:\oraclexe\app\oracle\product\11.2.0\server\jdbc\lib)
+-jre 붙여넣기 (C:\Program Files\Java\jdk1.8.0_151\jre\lib\ext)
+
+
+
+<tomcat>
+1. 다운로드
+-다운로드 : Tomcat 8.5.24 -> 64-bit Windows zip
+-경로 : 0.bigData 에 붙여넣기 (eclipse경로와 일치하도록)
+
+2. 환경설정
+1) 이클립스 : '서버에 서비스 로직 배포, 실행, 브라우저로 url 서비스 요청'까지 자동으로 매핑
+- servers 생성 : new -> other -> server -> Tomcat v8.5 -> 생성후 server.xml -> 63라인 port ="80" 으로 수정 -> validate
+(or 포트수정 : server.xml -> 하단 source -> 63라인 -> port="8080" 에서 port ="80" 으로 수정)
+- Windows -> WebBrowser -> Chrome
+
+2) 프로젝트 생성
+- New Project -> Dynamic Web Project -> **module version 2.5 (업계에서 쓰는 버전)**
+
+3) utf-8설정 (이클립스)
+- preference -> encoding 검색 -> utf-8로 변경 (CSS/HTML/JSP)
+- server -> 63라인 -> / 앞에 URIEncoding="utf-8" 추가
+
+
+<web Libraries>
+1. open API 추가
+-Web Project 우클릭 -> configure -> convert to Maven
+-pom.xml -> build 뒷부분에 추가할 내용 (jsoup, spring)
+	<dependencies>
+		<dependency>
+			<!-- jsoup HTML parser library @ https://jsoup.org/ -->
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.11.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>3.2.18.RELEASE</version>
+		</dependency>
+	</dependencies>
+
+2. Connection Pool
+
+1) Context configuration (Orcale 스펙에 맞게 설정)
+-WebContent -> WEB-INF (이클립스)에 ojdb6.jar 붙여넣기
+-Servers 하단 context.xml 복사 -> WebContent 하단 META-INF 에 붙여넣고 편집
+	<Context>
+	<Resource 
+		name="jdbc/myoracle" 
+		auth="Container"
+		type="javax.sql.DataSource" 
+		driverClassName="oracle.jdbc.OracleDriver"
+		url="jdbc:oracle:thin:@127.0.0.1:1521:xe"
+		username="scott" 
+		password="tiger" 
+		maxTotal="20" 
+		maxIdle="10"
+		maxWaitMillis="-1"/>
+		
+	</Context>
+
+2) web.xml configuration (tomcat 스펙에 맞게 설정)
+-web.xml 편집
+	<resource-ref>
+	 <description>Oracle Datasource example</description>
+	 <res-ref-name>jdbc/myoracle</res-ref-name>
+	 <res-type>javax.sql.DataSource</res-type>
+	 <res-auth>Container</res-auth>
+	</resource-ref>
+
+3) DBUtil 편집
+-java 코드 (context.xml의 DataSource 에 등록된 서버설정 정보의 등록된 별칭으로 자원활용 할 수 있도록 코드 입력)
+
+DataSource ds;
+
+static {
+	Context initContext = new InitialContext();
+	Context envContext  = (Context)initContext.lookup("java:/comp/env");
+	ds = (DataSource)envContext.lookup("jdbc/myoracle");
+	}
+
+getConnection(){
+	return ds.getConnection();
+	}
+
+3. JSP
+-C:\0.bigData\tomcat8.5\webapps\examples\WEB-INF\lib -> jar파일을 WEB-INF의 lib에 붙여넣기 (ojdbc6 붙여넣기랑 동일)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
